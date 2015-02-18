@@ -50,5 +50,5 @@ Para o funcionamento do plugin, instrumente sua suite com as recomendações aba
 Para o correto funcionamento do plugin é importante que o Job esteja configurado com as seguintes diretivas:
 
 1. Antes de invocar o Goal 'test' deve ser invocado o Goal 'clean'
-2. Adicione um Post-build Action de 'Arquive artefacts' com o seguinte valor: target/surefire-reports/**/*, target/screenshots/**/*, target/teststream.txt
+2. Adicione um Post-build Action de 'Arquive artefacts' com o seguinte valor: target/surefire-reports/\*\*/*, target/screenshots/\*\*/*, target/teststream.txt
 
