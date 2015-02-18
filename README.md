@@ -1,7 +1,7 @@
 # UI Test Capture
-Plugin para o Jenkins criado para permitir o acompanhamento dos resultados de uma suite de teste de interface, com uma interface simples para visualizar eventuais erros e a Screenshot do ocorrido.
+Plugin para o Jenkins visualizar a evolução dos resultados dos testes de uma Build corrente e o histórico de testes de builds anteriores. Com uma interface simples, permite visualizar facilmente a ocorrência de erros e a Screenshot do ocorrido.
 
-Este plugin foi originalmente escrito para um projeto de testes na linguagem Java, com a API Selenium e utilizando Maven, mas o mesmo pode ser adaptado para outras linguagens e APIs de testes, desde que obedeça o formato de informações exigido pelo arquivo target/testestream.txt.
+Este plugin foi escrito para um projeto de testes na linguagem Java, com a API Selenium e utilizando Maven, mas pode ser adaptado para outras linguagens e APIs de testes desde que obedeça o formato de informações exigido pelo arquivo target/testestream.txt.
 
 Para o funcionamento do plugin, instrumente sua suite com as recomendações abaixo:
 
