@@ -1,0 +1,13 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+    <html>    
+	    <meta charset="UTF-8" />
+	    <link rel="stylesheet" href="${resURL}/plugin/uitestcapture/css/index.css" />
+		<h3>UI Test Capture - Resultado do Build Atual - ${it.getName()} #${it.getVersaoAtual()}</h3>
+		<dl class="accordion" id="execucao"></dl>
+		<script>var relativepath='../ws/target/';</script>
+		<script>var pluginpath='${resURL}/plugin/uitestcapture/';</script>
+		<script src='http://codepen.io/assets/libs/fullpage/jquery.js'></script>
+		<script src='${resURL}/plugin/uitestcapture/js/index.js'></script>
+		<pre id="stream" style="display:none;width:600px;height:200px;border:1px solid blue;"></pre>
+    </html>
+</j:jelly>   

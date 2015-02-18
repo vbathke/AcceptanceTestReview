@@ -1,0 +1,9 @@
+.accordion {margin:10px;}
+.accordion dt, .accordion dd {padding: 2px;border-bottom: 0;}
+.accordion dt img {width:15px;height:auto;margin-bottom:-2px;}
+.accordion dt a, .accordion dd a {display: block;color: black;}
+.accordion dd {border-top: 0;font-size: 9px;}
+.accordion dd:last-of-type {border-top: 1px solid white;position: relative;top: -1px;}
+.stack {font-size: 11px;}
+a {text-decoration: none;}
+body {font: 16px Sans-Serif;}

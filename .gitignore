@@ -1,0 +1,9 @@
+bin/
+target/
+.idea/
+*.iml
+.project
+.settings
+.classpath
+work/
+nbactions.xml
