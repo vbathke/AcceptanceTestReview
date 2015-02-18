@@ -11,7 +11,7 @@ Para o funcionamento do plugin, instrumente sua suite com as recomendações aba
         private static StringBuilder status = new StringBuilder();
         @Rule public TestName testname = new TestName();
 
-### 2. No método com a anotação @After, onter a classe e método de teste atual atual e gravar a screenshot do teste
+### 2. No método com a anotação @After, obter a classe e método de teste atual atual e gravar a screenshot do teste
         classeAtual = this.getClass().getName();
         testeAtual = this.getClass().getName()+"."+testname.getMethodName();
         File scrFile = ((TakesScreenshot)FabricaWebDriver.getDriver()).getScreenshotAs(OutputType.FILE);
