@@ -23,15 +23,25 @@
  */
 package br.vbathke.jenkins;
 
+import java.io.IOException;
+
+import jenkins.model.Jenkins;
+
+import org.kohsuke.stapler.HttpResponse;
+import org.kohsuke.stapler.HttpResponses;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.interceptor.RequirePOST;
+
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.model.ProminentProjectAction;
 
-public class UITestCaptureProjectAction implements ProminentProjectAction{
+import org.kohsuke.stapler.bind.JavaScriptMethod;
+
+public class UITestCaptureProjectAction extends UiTestCaptureBase implements ProminentProjectAction{
 
     public final AbstractProject<?,?> project;
-    public String nomeProjeto;
-    public String versaoAtual;
-    public String novoTeste="testando2";
     
     @Override
     public String getIconFileName() {
@@ -50,10 +60,8 @@ public class UITestCaptureProjectAction implements ProminentProjectAction{
 
     public UITestCaptureProjectAction(AbstractProject<?,?> project) {
         this.project = project;
-        this.nomeProjeto = getName();
-        this.versaoAtual = getVersaoAtual();
     }
-
+    
     public AbstractProject<?,?> getProject(){
     	return project;
     }
@@ -66,8 +74,11 @@ public class UITestCaptureProjectAction implements ProminentProjectAction{
     	return ""+project.getLastBuild().getNumber();
     }
     
-    public String getTeste(){
-    	return "testando";
+    public String getBuildArtifacts(){
+    	return "ws/target/";
     }
     
+    public String getProjectUrl(){
+    	return getProject().getUrl();
+    }    
 }

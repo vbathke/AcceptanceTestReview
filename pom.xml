@@ -10,6 +10,7 @@
     <version>0.0.2</version>
     <packaging>hpi</packaging>
     <name>UI Test Capture</name>
+        
     <build>
         <plugins>
             <plugin>
@@ -28,6 +29,14 @@
             </plugin>         
         </plugins>
     </build>
+
+	<dependencies>
+	  <dependency>
+	    <groupId>org.jenkins-ci.plugins</groupId>
+	    <artifactId>jquery</artifactId>
+	    <version>1.0.2</version>
+	  </dependency>
+	</dependencies>
     
     <repositories>
         <repository>
