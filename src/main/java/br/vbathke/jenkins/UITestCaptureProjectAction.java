@@ -23,23 +23,10 @@
  */
 package br.vbathke.jenkins;
 
-import java.io.IOException;
-
-import jenkins.model.Jenkins;
-
-import org.kohsuke.stapler.HttpResponse;
-import org.kohsuke.stapler.HttpResponses;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
-import org.kohsuke.stapler.interceptor.RequirePOST;
-
-import hudson.model.AbstractProject;
-import hudson.model.Hudson;
 import hudson.model.ProminentProjectAction;
+import hudson.model.AbstractProject;
 
-import org.kohsuke.stapler.bind.JavaScriptMethod;
-
-public class UITestCaptureProjectAction extends UiTestCaptureBase implements ProminentProjectAction{
+public class UITestCaptureProjectAction extends UITestCaptureBase implements ProminentProjectAction{
 
     public final AbstractProject<?,?> project;
     

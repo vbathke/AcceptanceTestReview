@@ -4,6 +4,7 @@ var allPanels = $('.accordion > dd').hide();
 var bufferAtual=0;
 var novoBuffer=0;
 var builInfo;
+var historico=false;
   
   function parseBuffer(text){
       var lines = text.split(/\n/);
@@ -11,14 +12,17 @@ var builInfo;
       if(bufferAtual < novoBuffer){
           for(var i=bufferAtual; i<novoBuffer; i++){
         	var obj = jQuery.parseJSON(lines[i]);
-        	var comboAnalise="<select><option></option><option>Quebra de teste</option><option>Quebra de app</option><option>Intermitência</option></select>";
+        	var comboAnalise="<select id=\"analise "+obj.metodo+"\" name=\""+obj.metodo+"\" onChange=\"ajaxSubmit(this);\" class=\"comboAnalise\"><option value=\"\"></option><option value=\"failtest\">Quebra de teste</option><option value=\"failapp\">Quebra de app</option><option value=\"brittle\">Intermitência</option></select>";
+        	var titulo = "<div class=\"containerTeste\" id=\"container "+obj.metodo+"\">";
       		if(obj.status == "sucesso"){
-      			$("#execucao").append("<dt class=\"containerPassou\"><div class=\"analise\"></div><img src=\"images/passed.gif\" class=\"itemUiTest itemPassou\" /> <a href=\"\">"+obj.metodo+" </a></dt>");
+      			titulo+= "<dt class=\"containerPassou\"><div class=\"analise\"></div><img src=\"images/passed.gif\" class=\"itemUiTest itemPassou\" /> <a href=\"\">"+obj.metodo+" </a></dt>";
       		}else{
-      			$("#execucao").append("<dt class=\"containerFalhou\"><div class=\"analise\">"+comboAnalise+"</div><img src=\"images/failed.png\" class=\"itemUiTest itemFalhou\" /> <a href=\"\">"+obj.metodo+" </a></dt>");
+      			titulo+= "<dt class=\"containerFalhou\"><div class=\"analise\">"+comboAnalise+"</div><img src=\"images/failed.png\" class=\"itemUiTest itemFalhou\" /> <a href=\"\">"+obj.metodo+" </a></dt>";
       		}
-            $("#execucao").append("" +
+            $("#execucao").append(
+            		titulo  +
             		"<dd>" +
+            			"<input type=\"hidden\" id=\""+obj.metodo+"\" value='"+lines[i]+"' />" +
             			"<div class=\"infoUiTest\">" +
             				"<div class=\"screenshot\"><h2>Screenshot:</h2>" +
             					"<a href=\""+url+relativepath+"screenshots/"+obj.metodo+".png\" title=\""+obj.metodo+"\" class=\"linkScreenshot\">" +
@@ -27,14 +31,31 @@ var builInfo;
             				"</div>" +
             				((obj.status != "sucesso") ? "<div class=\"stackUiTest\"><h2>Stacktrace:</h2><pre class=\"stackUiTest\" id=\""+obj.metodo.replace(/\./g,"")+"\"></pre></div>" : "") +
             			"</div>" +
-            		"</dd>");
-            $('.linkScreenshot').colorbox({retinaImage:true, retinaUrl:true});
+            		"</dd></div>");
+            $('.linkScreenshot').colorbox({retinaImage:true, retinaUrl:true});            
+			/*
+			"<div>" +
+				"<div><h2>TODO:</h2>" +
+				"<textarea  name=\"todo_"+obj.metodo+"\" class=\"todo\"></textarea>" +
+				"<input type=\"button\" value=\"gravar\" />" +
+			"</div>"+
+			*/
+            
+	      	  try{
+			      $.get(url+relativepath+'surefire-reports/'+obj.metodo+'.txt',
+			            function(data){
+			    	  		var infoTeste = jQuery.parseJSON(data);
+			    	  		jQuery("[name='"+infoTeste.id+"']").val(infoTeste.status);
+			            }
+			        );
+	    	  }catch(err){}
+            
             
       		if(obj.status != "sucesso"){
       			fetchStack(obj.classe, obj.metodo.replace(/\./g,""));
       		}
-            allPanels = $('.accordion > dd').last().hide();
-            $('.accordion > dt > a').click(function() {
+            allPanels = $('.accordion > div > dd').last().hide();
+            $('.accordion > div > dt > a').click(function() {
                 $this = $(this);
                 $target =  $this.parent().next();
                 if(!$target.hasClass('active')){
@@ -42,23 +63,22 @@ var builInfo;
                      $target.addClass('active').slideDown();
                 }
                 return false;
-            });
+            });            
           }
-          
           bufferAtual=novoBuffer;
       }
   }
   function fetchBuffer(){
-      $.ajaxSetup({cache:false});
-      $.get(url+relativepath+'teststream.txt',
+	  jQuery.ajaxSetup({cache:false});
+	  jQuery.get(url+relativepath+'teststream.txt',
           function(data){
-              $('#stream').html(data);
+    	  	  jQuery('#stream').html(data);
               if (data.length > 0) {
-                  parseBuffer($("#stream").html());            	  
+                  parseBuffer(jQuery("#stream").html());            	  
               }else{
             	  console.log("stream empty");
-            	  $('#stream').html("");
-            	  $('#execucao').html("");
+            	  jQuery('#stream').html("");
+            	  jQuery('#execucao').html("");
               }
           }
       );
@@ -68,24 +88,24 @@ var builInfo;
       $.ajaxSetup({cache:false});
       $.get(url+relativepath+'surefire-reports/'+classe+'.txt',
           function(data){
-              $("#"+metodo).html(data);
+    	  	jQuery("#"+metodo).html(data);
           }
       );
   }
   
   function mostrarFalhas(){
-	  $(".containerPassou").hide();
-	  $(".containerFalhou").show();
+	  jQuery(".containerPassou").hide();
+	  jQuery(".containerFalhou").show();
   }
   
   function mostrarSucessos(){	  
-	  $(".containerPassou").show();
-	  $(".containerFalhou").hide();
+	  jQuery(".containerPassou").show();
+	  jQuery(".containerFalhou").hide();
   }
   
   function mostrarTodos(){
-	  $(".containerPassou").show();
-	  $(".containerFalhou").show();
+	  jQuery(".containerPassou").show();
+	  jQuery(".containerFalhou").show();
   }
   
   fetchBuffer();
@@ -94,28 +114,31 @@ var builInfo;
 	  fetchBuffer();
 	  
 	  //Atualizar totais
-	  $(".total").html($(".itemUiTest").length);
-	  $(".passou").html($(".itemPassou").length);
-	  $(".falhou").html($(".itemFalhou").length);
-	  $("#resultado").show();
-	  
+	  jQuery(".total").html(jQuery(".itemUiTest").length);
+	  jQuery(".passou").html(jQuery(".itemPassou").length);
+	  jQuery(".falhou").html(jQuery(".itemFalhou").length);
+	  jQuery("#resultado").show();
+	  atualizarQuadroFalhas();
+	  	  	  
 	  //Ordenar
 	  if($("#ordenar").is(":checked")){
 		  ordenar();
 	  }
 
 	  //Mostrar Loading de processamento da Build
-	  buildInfo = $.parseJSON($.ajax({ type:"GET", url: url+"/lastBuild/api/json", async:false }).responseText);
-	  if(buildInfo.result === null){
-		  $(".loadingUiTest").show();
-	  }else{
-		  $(".loadingUiTest").hide();		  
-	  }
+  	  try{
+		  buildInfo = jQuery.parseJSON(jQuery.ajax({ type:"GET", url:url+"/lastBuild/api/json", async:false }).responseText);
+		  if(buildInfo.result === null){
+			  jQuery(".loadingUiTest").show();
+		  }else{
+			  jQuery(".loadingUiTest").hide();		  
+		  }
+	  }catch(err){}
   },2000);
   
 	function ordenar(){
-		$('dt').sortElements(function(a, b){
-		    return $(a).text() > $(b).text() ? 1 : -1;
+		jQuery('.containerTeste').sortElements(function(a, b){
+		    return jQuery(a).attr('id') > jQuery(b).attr('id') ? 1 : -1;
 		});
 	}
   
@@ -171,10 +194,31 @@ var builInfo;
           });
       };
   })();
-  
-function ajaxSubmit(postUrl){
-	$.post(postUrl, {name: "Foo"}).done(function(data){
-		console.log( "Data Loaded: " + data );}
-	);
-}
 })(jQuery)
+
+function ajaxSubmit(obj){
+	var stringAnterior = document.getElementById(obj.name).value;
+	var jsonObj = {id: obj.name, status: obj.value}	
+	jQuery.post(url+"uitestcapture/ajaxProcess", jsonObj, function( data ) {
+		  //console.log(data);
+		atualizarQuadroFalhas();
+	});
+}
+
+function atualizarQuadroFalhas(){
+	console.log(jQuery(".itemFalhou").length);
+	if(jQuery(".itemFalhou").length>0){
+		  jQuery(".quadroFalhas").show();
+		  jQuery(".analise").show();
+	}else{
+		jQuery(".quadroFalhas").hide();
+		jQuery(".analise").hide();
+	}
+
+	jQuery(".quebraPendente").html(jQuery(".comboAnalise option[value=\'\']:selected").length); 
+	jQuery(".quebraApp").html(jQuery(".comboAnalise option[value=\'failtest\']:selected").length); 
+	jQuery(".quebraTeste").html(jQuery(".comboAnalise option[value=\'failapp\']:selected").length); 
+	jQuery(".quebraBrittle").html(jQuery(".comboAnalise option[value=\'brittle\']:selected").length);
+}
+
+

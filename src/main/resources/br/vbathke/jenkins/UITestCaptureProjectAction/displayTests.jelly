@@ -1,0 +1,62 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<base href="${it.getRootUrl()}plugin/uitestcapture/" />
+	<script>var url='${it.getRootUrl()}${it.getProjectUrl()}';</script>
+	<script>var relativepath='${it.getBuildArtifacts()}';</script>
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<div class="uiTest">
+	    <div class="headerUiTest">
+			<h3 class="titulo">UI Test Capture - Resultado do Build - ${it.getName()} #${it.getVersaoAtual()}</h3>
+			<div id="resultado">
+				<div style="float:right;margin-left:20px;" class="quadroFalhas">
+				<h4  style="margin-left:10px;">Falhas</h4>
+				<table class="analise"  style="width:200px;">
+					<tr>
+						<td align="right" style="width:100px;">Em análise:</td>
+						<td  style="width:30px;"> <span class="resultadoQuebra quebraPendente">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Quebra de app: </td><td><span class="resultadoQuebra quebraApp">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Quebra de teste: </td><td><span class="resultadoQuebra quebraTeste">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Intermitência: </td><td><span class="resultadoQuebra quebraBrittle">0</span></td>
+					</tr>
+				</table>
+				</div>
+				
+				<div style="float:left;">		
+				<h4 style="">Resultado</h4>
+				<table>
+					<tr>
+						<td align="right"><a href="javascript:mostrarTodos();">Testes</a>:</td><td> <span class="resultado total">0</span></td>
+					</tr>
+					<tr>
+						<td align="right"><a href="javascript:mostrarSucessos();">Passou</a>: </td><td><span class="resultado passou">0</span></td>
+					</tr>
+					<tr>
+						<td align="right"><a href="javascript:mostrarFalhas();">Falhou</a>: </td><td><span class="resultado falhou">0</span></td>
+					</tr>
+					<tr>
+						<td colspan="2" checked="checked">
+							<input type="checkbox" id="ordenar" checked="checked" /> Ordenar
+						</td>
+					</tr>
+				</table>
+				</div>
+				
+
+			</div>
+		</div>
+		<dl class="accordion" id="execucao"></dl>
+		<div>
+			<img src="images/loading.gif" class="loadingUiTest" />
+		</div>
+		
+		<script src='js/jquery.colorbox-min.js'></script>
+		<script src='js/index.js'></script>
+		<pre id="stream" style="display:none;width:600px;height:200px;border:1px solid blue;"></pre>
+	</div>
+</j:jelly>   

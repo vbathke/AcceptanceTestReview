@@ -10,7 +10,7 @@
 .headerUiTest{height:50px;}
 .loadingUiTest{width:20px;height:auto;margin:5px 0px 0px 30px;display:none;}
 
-.analise{width:120px;display:inline-block}
+.analise{width:120px;display:none;}
 #resultado{float:right;margin-top:14px;margin-right:14px;display:none;}
 #resultado table td{font-size:12px;}
 .resultado div{display:inline-block;}
@@ -21,12 +21,13 @@
 .yui-log{display:none;}
 #side-panel{display:none;}
 .fixedGridLayout #main-panel{padding:0px;}			
+.todo{width:50%;height:130px;margin-bottom:20px;}
 
 
 
 .infoUiTest {height:460px;}
 .screenshot {font-size: 11px; display:inline-block;width:37%;height:400px;float:left;margin-right:3%;}
-.screenshot img {max-width:100%;height:auto;}
+.screenshot img {max-width:100%;height:auto;max-height:400px;}
 .stackUiTest {font-size: 11px; display:inline-block;width:60%;height:400px;}
 .stackUiTest pre { width:90%;height:100%;overflow:auto;white-space: pre-wrap;}
 .uiTest a {text-decoration: none;}

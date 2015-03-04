@@ -7,3 +7,5 @@ target/
 .classpath
 work/
 nbactions.xml
+/package.launch
+/run.launch
