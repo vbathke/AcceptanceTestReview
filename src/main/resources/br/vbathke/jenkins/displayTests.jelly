@@ -1,0 +1,67 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<base href="${it.getRootUrl()}plugin/uitestcapture/" />
+	<script>var url='${it.getRootUrl()}${it.getProjectUrl()}';</script>
+	<script>var relativepath='${it.getBuildArtifacts()}';</script>
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/colorbox.css" />
+	<div class="uiTest">
+	    <div class="headerUiTest">
+			<h3 class="titulo">
+				teste UI Test Capture - ${it.getName()} #<span id="buildInfoId">${it.getVersaoAtual()}</span>
+				<a href="javascript:ajaxRun('${it.getRootUrl()}${it.getProjectUrl()}build?delay=0sec');" class="reexec">
+					<img src="images/reexec.png" style="margin-top:-4px;margin:0 10px 0 10px;"/>
+				</a>
+				<span style="font-size:10px;font-weight:normal;">
+					<input type="checkbox" id="ordenar" checked="checked" /> Order
+				</span>
+			</h3>
+			<div id="resultado">
+				<div style="float:right;margin-left:20px;" class="quadroFalhas">
+				<h4  style="margin-left:10px;">Fails</h4>
+				<table class="analise"  style="width:200px;">
+					<tr>
+						<td align="right" style="width:100px;">Under review:</td>
+						<td  style="width:30px;"> <span class="resultadoQuebra quebraPendente">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">App broken: </td><td><span class="resultadoQuebra quebraApp">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Test broken: </td><td><span class="resultadoQuebra quebraTeste">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Intermittent: </td><td><span class="resultadoQuebra quebraBrittle">0</span></td>
+					</tr>
+				</table>
+				</div>
+				
+				<div style="float:left;">		
+				<h4>
+					<img src="images/loading.gif" class="loadingUiTest" /> 
+					Results
+				</h4>
+				<table>
+					<tr>
+						<td align="right"><a href="javascript:mostrarTodos();">Tests</a>:</td><td> <span class="resultado total">0</span></td>
+					</tr>
+					<tr>
+						<td align="right"><a href="javascript:mostrarSucessos();">Passed</a>: </td><td><span class="resultado passou">0</span></td>
+					</tr>
+					<tr>
+						<td align="right"><a href="javascript:mostrarFalhas();">Fail</a>: </td><td><span class="resultado falhou">0</span></td>
+					</tr>
+					<tr>
+						<td colspan="2" checked="checked">
+						</td>
+					</tr>
+				</table>
+				</div>
+			</div>
+		</div>
+		<dl class="accordion" id="execucao"></dl>
+		
+		<script src='js/jquery.colorbox-min.js'></script>
+		<script src='js/index.js'></script>
+		<pre id="stream" style="display:none;width:600px;height:200px;border:1px solid blue;"></pre>
+	</div>
+</j:jelly>   

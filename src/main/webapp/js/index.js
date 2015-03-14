@@ -3,86 +3,89 @@
 var allPanels = $('.accordion > dd').hide();
 var bufferAtual=0;
 var novoBuffer=0;
-var builInfo;
+var buildInfo;
+var versaoAtual=0;
 var historico=false;
   
-  function parseBuffer(text){
-      var lines = text.split(/\n/);
-      novoBuffer = lines.length -1;
-      if(bufferAtual < novoBuffer){
-          for(var i=bufferAtual; i<novoBuffer; i++){
-        	var obj = jQuery.parseJSON(lines[i]);
-        	var comboAnalise="<select id=\"analise "+obj.metodo+"\" name=\""+obj.metodo+"\" onChange=\"ajaxSubmit(this);\" class=\"comboAnalise\"><option value=\"\"></option><option value=\"failtest\">Quebra de teste</option><option value=\"failapp\">Quebra de app</option><option value=\"brittle\">Intermitência</option></select>";
-        	var titulo = "<div class=\"containerTeste\" id=\"container "+obj.metodo+"\">";
-      		if(obj.status == "sucesso"){
-      			titulo+= "<dt class=\"containerPassou\"><div class=\"analise\"></div><img src=\"images/passed.gif\" class=\"itemUiTest itemPassou\" /> <a href=\"\">"+obj.metodo+" </a></dt>";
-      		}else{
-      			titulo+= "<dt class=\"containerFalhou\"><div class=\"analise\">"+comboAnalise+"</div><img src=\"images/failed.png\" class=\"itemUiTest itemFalhou\" /> <a href=\"\">"+obj.metodo+" </a></dt>";
-      		}
-            $("#execucao").append(
-            		titulo  +
-            		"<dd>" +
-            			"<input type=\"hidden\" id=\""+obj.metodo+"\" value='"+lines[i]+"' />" +
-            			"<div class=\"infoUiTest\">" +
-            				"<div class=\"screenshot\"><h2>Screenshot:</h2>" +
-            					"<a href=\""+url+relativepath+"screenshots/"+obj.metodo+".png\" title=\""+obj.metodo+"\" class=\"linkScreenshot\">" +
-            						"<img src=\""+url+relativepath+"screenshots/"+obj.metodo+".png\" />" +
-            					"</a>" +
-            				"</div>" +
-            				((obj.status != "sucesso") ? "<div class=\"stackUiTest\"><h2>Stacktrace:</h2><pre class=\"stackUiTest\" id=\""+obj.metodo.replace(/\./g,"")+"\"></pre></div>" : "") +
-            			"</div>" +
-            		"</dd></div>");
-            $('.linkScreenshot').colorbox({retinaImage:true, retinaUrl:true});            
-			/*
-			"<div>" +
-				"<div><h2>TODO:</h2>" +
-				"<textarea  name=\"todo_"+obj.metodo+"\" class=\"todo\"></textarea>" +
-				"<input type=\"button\" value=\"gravar\" />" +
-			"</div>"+
-			*/
-            
-	      	  try{
-			      $.get(url+relativepath+'surefire-reports/'+obj.metodo+'.txt',
-			            function(data){
-			    	  		var infoTeste = jQuery.parseJSON(data);
-			    	  		jQuery("[name='"+infoTeste.id+"']").val(infoTeste.status);
-			            }
-			        );
-	    	  }catch(err){}
-            
-            
-      		if(obj.status != "sucesso"){
-      			fetchStack(obj.classe, obj.metodo.replace(/\./g,""));
-      		}
-            allPanels = $('.accordion > div > dd').last().hide();
-            $('.accordion > div > dt > a').click(function() {
-                $this = $(this);
-                $target =  $this.parent().next();
-                if(!$target.hasClass('active')){
-                	$('.active').removeClass('active').slideUp();
-                     $target.addClass('active').slideDown();
-                }
-                return false;
-            });            
-          }
-          bufferAtual=novoBuffer;
-      }
-  }
-  function fetchBuffer(){
-	  jQuery.ajaxSetup({cache:false});
-	  jQuery.get(url+relativepath+'teststream.txt',
-          function(data){
-    	  	  jQuery('#stream').html(data);
-              if (data.length > 0) {
-                  parseBuffer(jQuery("#stream").html());            	  
-              }else{
-            	  console.log("stream empty");
-            	  jQuery('#stream').html("");
-            	  jQuery('#execucao').html("");
-              }
-          }
-      );
-  }
+	function parseBuffer(text){
+		var lines = text.split(/\n/);
+		novoBuffer = lines.length -1;
+		if(bufferAtual < novoBuffer){
+			for(var i=bufferAtual; i<novoBuffer; i++){
+				var obj = jQuery.parseJSON(lines[i]);
+				appendResult(obj, lines[i]);
+			}
+			bufferAtual=novoBuffer;
+		}
+	}
+
+	function appendResult(obj, rawObj){
+		var comboAnalise="<select id=\"analise "+obj.metodo+"\" name=\""+obj.metodo+"\" onChange=\"ajaxSubmit(this);\" class=\"comboAnalise\"><option value=\"\"></option><option value=\"failapp\">App broken</option><option value=\"failtest\">Test broken</option><option value=\"brittle\">Intermittent</option></select>";
+		var titulo = "<div class=\"containerTeste\" id=\"container "+obj.metodo+"\">";
+		if(obj.status == "sucesso"){
+			titulo+= "<dt class=\"containerPassou\"><img src=\"images/passed.gif\" class=\"itemUiTest itemPassou\" /> <a href=\"\">"+obj.metodo+" </a></dt>";
+			comboAnalise="";
+		}else{
+			titulo+= "<dt class=\"containerFalhou\"><img src=\"images/failed.png\" class=\"itemUiTest itemFalhou\" /> <a href=\"\">"+obj.metodo+" </a></dt>";
+		}
+		$("#execucao").append(
+			titulo  +
+			"<dd>" +
+				"<input type=\"hidden\" id=\""+obj.metodo+"\" value='"+rawObj+"' />" +
+				"<div class=\"infoUiTest\">" +
+					"<div class=\"screenshot\"><h2>Screenshot:</h2>" +
+						"<a href=\""+url+relativepath+"screenshots/"+obj.metodo+".png\" title=\""+obj.metodo+"\" class=\"linkScreenshot\">" +
+							"<img src=\""+url+relativepath+"screenshots/"+obj.metodo+".png\" />" +
+						"</a>" +
+					"</div>" +
+					((obj.status != "sucesso") ? "<div class=\"stackUiTest\"><h2>Stacktrace:</h2><pre class=\"stackUiTest\" id=\""+obj.metodo.replace(/\./g,"")+"\"></pre></div>" : "") +
+				"</div>" +
+				((obj.status != "sucesso") ? "<div class=\"comboAnalise\"><div><h2>Failure analysis:</h2><div class=\"analise\">"+comboAnalise+"</div>"  : "") +
+				"</div>"+
+			"</dd></div>");
+		$('.linkScreenshot').colorbox({retinaImage:true, retinaUrl:true});
+		/* "<div>" +
+			"<div><h2>TODO:</h2>" +
+			"<textarea  name=\"todo_"+obj.metodo+"\" class=\"todo\"></textarea>" +
+			"<input type=\"button\" value=\"gravar\" />" +
+		"</div>"+ */
+		try{
+			$.get(url+relativepath+'surefire-reports/'+obj.metodo+'.txt',
+				function(data){
+					var infoTeste = jQuery.parseJSON(data);
+					jQuery("[name='"+infoTeste.id+"']").val(infoTeste.status);
+				}
+		    );
+		}catch(err){}
+		if(obj.status != "sucesso"){
+			fetchStack(obj.classe, obj.metodo.replace(/\./g,""));
+		}
+		allPanels = $('.accordion > div > dd').last().hide();
+		$('.accordion > div > dt > a').click(function() {
+			$this = $(this);
+			$target =  $this.parent().next();
+			if(!$target.hasClass('active')){
+				$('.active').removeClass('active').slideUp();
+			     $target.addClass('active').slideDown();
+			}
+			return false;
+		});
+	}
+  
+	function fetchBuffer(){
+		jQuery.ajaxSetup({cache:false});
+		jQuery.get(url+relativepath+'teststream.txt',
+			function(data){
+    	  		jQuery('#stream').html(data);
+    	  		if (data.length > 0) {
+    	  			parseBuffer(jQuery("#stream").html());            	  
+    	  		}else{
+    	  			jQuery('#stream').html("");
+    	  			jQuery('#execucao').html("");
+    	  		}
+        	}
+		);
+	}
   
   function fetchStack(classe, metodo){
       $.ajaxSetup({cache:false});
@@ -121,7 +124,7 @@ var historico=false;
 	  atualizarQuadroFalhas();
 	  	  	  
 	  //Ordenar
-	  if($("#ordenar").is(":checked")){
+	  if(jQuery("#ordenar").is(":checked")){
 		  ordenar();
 	  }
 
@@ -129,20 +132,28 @@ var historico=false;
   	  try{
 		  buildInfo = jQuery.parseJSON(jQuery.ajax({ type:"GET", url:url+"/lastBuild/api/json", async:false }).responseText);
 		  if(buildInfo.result === null){
+			  if(buildInfo.id > versaoAtual){
+				  jQuery("#execucao").children().remove();
+				  jQuery("#buildInfoId").html(buildInfo.id);
+				  versaoAtual = buildInfo.id;
+				  bufferAtual=0;
+			  }
+			  jQuery(".reexec").fadeOut("slow");
 			  jQuery(".loadingUiTest").show();
 		  }else{
-			  jQuery(".loadingUiTest").hide();		  
+			  jQuery(".reexec").fadeIn("slow");
+			  jQuery(".loadingUiTest").hide();
 		  }
 	  }catch(err){}
   },2000);
   
+  	
 	function ordenar(){
 		jQuery('.containerTeste').sortElements(function(a, b){
 		    return jQuery(a).attr('id') > jQuery(b).attr('id') ? 1 : -1;
 		});
 	}
-  
-  
+    
   /**
    * jQuery.fn.sortElements
    * --------------
@@ -200,25 +211,28 @@ function ajaxSubmit(obj){
 	var stringAnterior = document.getElementById(obj.name).value;
 	var jsonObj = {id: obj.name, status: obj.value}	
 	jQuery.post(url+"uitestcapture/ajaxProcess", jsonObj, function( data ) {
-		  //console.log(data);
 		atualizarQuadroFalhas();
 	});
 }
 
 function atualizarQuadroFalhas(){
-	console.log(jQuery(".itemFalhou").length);
-	if(jQuery(".itemFalhou").length>0){
+	if(jQuery(".itemFalhou").length>0 && historico){
 		  jQuery(".quadroFalhas").show();
 		  jQuery(".analise").show();
+		  jQuery(".comboAnalise").show();
 	}else{
 		jQuery(".quadroFalhas").hide();
 		jQuery(".analise").hide();
+		jQuery(".comboAnalise").hide();
 	}
 
 	jQuery(".quebraPendente").html(jQuery(".comboAnalise option[value=\'\']:selected").length); 
-	jQuery(".quebraApp").html(jQuery(".comboAnalise option[value=\'failtest\']:selected").length); 
-	jQuery(".quebraTeste").html(jQuery(".comboAnalise option[value=\'failapp\']:selected").length); 
+	jQuery(".quebraApp").html(jQuery(".comboAnalise option[value=\'failapp\']:selected").length); 
+	jQuery(".quebraTeste").html(jQuery(".comboAnalise option[value=\'failtest\']:selected").length); 
 	jQuery(".quebraBrittle").html(jQuery(".comboAnalise option[value=\'brittle\']:selected").length);
 }
 
-
+function ajaxRun(url){
+	jQuery.post(url, '{}', function( data ) {
+	});
+}

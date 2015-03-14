@@ -8,10 +8,11 @@
 
 .titulo{float:left;margin-left:15px;}
 .headerUiTest{height:50px;}
-.loadingUiTest{width:20px;height:auto;margin:5px 0px 0px 30px;display:none;}
+.loadingUiTest{width:20px;height:auto;margin:-5px 5px 0px -20px;display:none;}
 
+.quadroFalhas{display:none;}
 .analise{width:120px;display:none;}
-#resultado{float:right;margin-top:14px;margin-right:14px;display:none;}
+#resultado{float:right;margin-top:14px;margin-right:14px;display:none;position:fixed;top:70px;right:30px;}
 #resultado table td{font-size:12px;}
 .resultado div{display:inline-block;}
 .passou{color:green;}
