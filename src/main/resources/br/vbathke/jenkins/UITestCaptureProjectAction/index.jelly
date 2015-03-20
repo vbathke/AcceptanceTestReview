@@ -3,6 +3,24 @@
 		<l:main-panel>
 			<script>var historico=false;</script>
 			<st:include page="/br/vbathke/jenkins/displayTests.jelly" />
+
+			<!--
+			<ul>
+				<j:forEach items="${it.project.getBuildsAsMap()}" var="i" end="9">
+	             <li>${i.getKey()}</li>
+				<script>
+				jQuery.get(url+'${i.getKey()}/artifact/target/'+'teststream.txt',
+					function(data){
+		            	var resultado${i.getKey()} = jQuery.parseJSON(data);
+		            	//console.log(resultado${i.getKey()});
+		        	}
+				);
+	            </script>
+	             
+	            </j:forEach>
+            </ul>
+            -->
+
 	    </l:main-panel>
     </l:layout>
 </j:jelly>   
