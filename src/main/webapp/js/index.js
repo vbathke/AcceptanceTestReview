@@ -44,11 +44,6 @@ var historico=false;
 				"</div>"+
 			"</dd></div>");
 		$('.linkScreenshot').colorbox({retinaImage:true, retinaUrl:true});
-		/* "<div>" +
-			"<div><h2>TODO:</h2>" +
-			"<textarea  name=\"todo_"+obj.metodo+"\" class=\"todo\"></textarea>" +
-			"<input type=\"button\" value=\"gravar\" />" +
-		"</div>"+ */
 		try{
 			$.get(url+relativepath+'surefire-reports/'+obj.metodo+'.txt',
 				function(data){
