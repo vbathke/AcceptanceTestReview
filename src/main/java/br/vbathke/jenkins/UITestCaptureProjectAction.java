@@ -23,12 +23,8 @@
  */
 package br.vbathke.jenkins;
 
-import java.util.ArrayList;
-
 import hudson.model.ProminentProjectAction;
 import hudson.model.AbstractProject;
-import hudson.model.Run;
-import hudson.util.RunList;
 
 public class UITestCaptureProjectAction extends UITestCaptureBase implements ProminentProjectAction{
 

@@ -19,15 +19,6 @@ var historico=false;
 		}
 	}
 
-	function gravarComentario(metodo){
-		console.log("gravar: "+metodo)
-	}
-	
-	function carregarComentario(metodo){
-		console.log("recuperar: "+metodo)		
-	}
-	
-	
 	function appendResult(obj, rawObj){
 		var comboAnalise="<select id=\"analise "+obj.metodo+"\" name=\""+obj.metodo+"\" onChange=\"ajaxSubmit(this);\" class=\"comboAnalise\"><option value=\"\"></option><option value=\"failapp\">App broken</option><option value=\"failtest\">Test broken</option><option value=\"brittle\">Intermittent</option></select>";
 		var titulo = "<div class=\"containerTeste\" id=\"container "+obj.metodo+"\">";
@@ -50,14 +41,14 @@ var historico=false;
 					((obj.status != "sucesso") ? "<div class=\"stackUiTest\"><h2>Stacktrace:</h2><pre class=\"stackUiTest\" id=\""+obj.metodo.replace(/\./g,"")+"\"></pre></div>" : "") +
 				"</div>" +
 				((obj.status != "sucesso") ? "<div class=\"comboAnalise\"><div><h2>Failure analysis:</h2><div class=\"analise\">"+comboAnalise+"</div>"  : "") +
-				//"<div>" +
-					//"<h2>Comments:</h2>" +
-					//"<textarea  name=\"comments_"+obj.metodo+"\" class=\"todo\"></textarea><br />" +
-					//"<input type=\"button\" value=\"gravar\" style=\"margin:5px 0 20px 630px;\" onclick=\"gravarComentario('"+obj.metodo+"');\" />" +
-					//"<script  type=\"text/javascript\">carregarComentario('"+obj.metodo+"');</script>"+ //TODO: problemas
-				//"</div>" +
+				"</div>"+
 			"</dd></div>");
 		$('.linkScreenshot').colorbox({retinaImage:true, retinaUrl:true});
+		/* "<div>" +
+			"<div><h2>TODO:</h2>" +
+			"<textarea  name=\"todo_"+obj.metodo+"\" class=\"todo\"></textarea>" +
+			"<input type=\"button\" value=\"gravar\" />" +
+		"</div>"+ */
 		try{
 			$.get(url+relativepath+'surefire-reports/'+obj.metodo+'.txt',
 				function(data){
@@ -80,7 +71,7 @@ var historico=false;
 			return false;
 		});
 	}
-	  
+  
 	function fetchBuffer(){
 		jQuery.ajaxSetup({cache:false});
 		jQuery.get(url+relativepath+'teststream.txt',
