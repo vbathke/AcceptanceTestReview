@@ -7,9 +7,19 @@ import hudson.model.Project;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+
+import br.vbathke.model.Execution;
+import br.vbathke.model.Job;
+import br.vbathke.model.Result;
+import br.vbathke.model.Test;
 
 
 public class UITestCaptureAction extends UITestCaptureBase implements Action {
@@ -23,7 +33,7 @@ public class UITestCaptureAction extends UITestCaptureBase implements Action {
     
     @Override
     public String getIconFileName() {
-        return "/plugin/uitestcapture/images/uitestcapture.png";
+        return "/plugin/ui-test-capture/images/uitestcapture.png";
     }
 
     @Override
@@ -33,7 +43,7 @@ public class UITestCaptureAction extends UITestCaptureBase implements Action {
 
     @Override
     public String getUrlName() {
-        return "uitestcapture";
+        return "ui-test-capture";
     }
     
     public AbstractBuild<?,?> getBuild() {
@@ -49,25 +59,10 @@ public class UITestCaptureAction extends UITestCaptureBase implements Action {
     }
     
     public String getBuildArtifacts(){
-    	return "artifact/target/";
+    	return "artifact/";
     }
         
     public String getProjectUrl(){
     	return getBuild().getUrl();
-    }
-    
-    public void doAjaxProcess(StaplerRequest request, StaplerResponse response) {
-      	try {
-			String jsoncontent = "{\"id\":\""+request.getParameter("id")+"\", \"status\":\""+request.getParameter("status")+"\"}";
-			BufferedWriter out = new BufferedWriter(new FileWriter(getBuild().getRootDir().getAbsolutePath()+"/archive/target/surefire-reports/"+request.getParameter("id")+".txt"));
-			out.write(jsoncontent);
-			out.close();
-			
-			response.getOutputStream().println("escrita "+request.getParameter("id")+": "+jsoncontent);
-			System.out.println("escrita "+request.getParameter("id")+": "+jsoncontent);
-
-      	} catch (IOException e) {
-			System.out.println(e);
-		}
     }
 }

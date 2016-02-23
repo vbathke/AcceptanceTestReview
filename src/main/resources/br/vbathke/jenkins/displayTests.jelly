@@ -1,13 +1,19 @@
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<base href="${it.getRootUrl()}plugin/uitestcapture/" />
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+  
+	<base href="${it.getRootUrl()}plugin/ui-test-capture/" />
 	<script>var url='${it.getRootUrl()}${it.getProjectUrl()}';</script>
-	<script>var relativepath='${it.getBuildArtifacts()}';</script>
+	<script>var relativepath='${it.getBuildArtifacts()}'+resources;</script>
+	<script>var job='${it.getName()}';</script>
+	<script>var descVersaoAtual='${it.getVersaoAtual()}';</script>
+	
     <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/colorbox.css" />
+
 	<div class="uiTest">
 	    <div class="headerUiTest">
+			
 			<h3 class="titulo">
-				teste UI Test Capture - ${it.getName()} #<span id="buildInfoId">${it.getVersaoAtual()}</span>
+				UI Test Capture - ${it.getName()} #<span id="buildInfoId">${it.getVersaoAtual()}</span>
 				<a href="javascript:ajaxRun('${it.getRootUrl()}${it.getProjectUrl()}build?delay=0sec');" class="reexec">
 					<img src="images/reexec.png" style="margin-top:-4px;margin:0 10px 0 10px;"/>
 				</a>
@@ -15,40 +21,28 @@
 					<input type="checkbox" id="ordenar" checked="checked" /> Order
 				</span>
 			</h3>
+			
 			<div id="resultado">
-				<div style="float:right;margin-left:20px;" class="quadroFalhas">
-				<h4  style="margin-left:10px;">Fails</h4>
-				<table class="analise"  style="width:200px;">
-					<tr>
-						<td align="right" style="width:100px;">Under review:</td>
-						<td  style="width:30px;"> <span class="resultadoQuebra quebraPendente">0</span></td>
-					</tr>
-					<tr>
-						<td align="right">App broken: </td><td><span class="resultadoQuebra quebraApp">0</span></td>
-					</tr>
-					<tr>
-						<td align="right">Test broken: </td><td><span class="resultadoQuebra quebraTeste">0</span></td>
-					</tr>
-					<tr>
-						<td align="right">Intermittent: </td><td><span class="resultadoQuebra quebraBrittle">0</span></td>
-					</tr>
-				</table>
-				</div>
-				
 				<div style="float:left;">		
 				<h4>
 					<img src="images/loading.gif" class="loadingUiTest" /> 
-					Results
+					Test suite results
 				</h4>
 				<table>
 					<tr>
-						<td align="right"><a href="javascript:mostrarTodos();">Tests</a>:</td><td> <span class="resultado total">0</span></td>
+						<td align="right">Test Passed: </td><td><span class="resultado passou">0</span></td>
 					</tr>
 					<tr>
-						<td align="right"><a href="javascript:mostrarSucessos();">Passed</a>: </td><td><span class="resultado passou">0</span></td>
+						<td align="right">Test Fail: </td><td><span class="resultado falhou">0</span></td>
 					</tr>
 					<tr>
-						<td align="right"><a href="javascript:mostrarFalhas();">Fail</a>: </td><td><span class="resultado falhou">0</span></td>
+						<td align="right">Working Tests:</td><td> <span class="resultado working">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Flaky: </td><td><span class="resultado flaky">0</span></td>
+					</tr>
+					<tr>
+						<td align="right">Total: </td><td><span class="resultado total">0</span></td>
 					</tr>
 					<tr>
 						<td colspan="2" checked="checked">
@@ -58,10 +52,30 @@
 				</div>
 			</div>
 		</div>
+		<div class="headerUiTest">
+			<h3 class="titulo">
+				Test suite
+			</h3>
+		</div>
 		<dl class="accordion" id="execucao"></dl>
+		
+		<div class="headerUiTest" id="hFailApp">
+			<h3 class="titulo">
+				Quarantined tests by App Failure
+			</h3>
+		</div>
+		<dl class="accordion" id="dlFailApp"></dl>
+
+		<div class="headerUiTest" id="hFailTest">
+			<h3 class="titulo">
+				Quarantined tests by Test Failure (Flaky Tests)
+			</h3>
+		</div>
+		<dl class="accordion" id="dlFailTest"></dl>
 		
 		<script src='js/jquery.colorbox-min.js'></script>
 		<script src='js/index.js'></script>
+		
 		<pre id="stream" style="display:none;width:600px;height:200px;border:1px solid blue;"></pre>
 	</div>
 </j:jelly>   

@@ -23,53 +23,62 @@
  */
 package br.vbathke.jenkins;
 
-import java.io.IOException;
-
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
-import hudson.tasks.BuildStepDescriptor;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepMonitor;
-import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class UITestCaptureRecorder extends Recorder {
-    @DataBoundConstructor
-    public UITestCaptureRecorder() {
-    }
 
-    @Extension
-    public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
-        @Override
-        public boolean isApplicable(Class<? extends AbstractProject> project) {
-            return true;
-        }
+	@DataBoundConstructor
+	public UITestCaptureRecorder() {
+		super();
+	}
 
-        @Override
-        public String getDisplayName() {
-            return "UI Test Capture";
-        }
-    }
-    
-    @Override
-    public BuildStepMonitor getRequiredMonitorService() {
-        return BuildStepMonitor.NONE;
-    }
+	@Extension
+	public static final class DescriptorImpl extends Descriptor{}	
+		
+	@Override
+	public Descriptor getDescriptor() {
+		return (Descriptor) super.getDescriptor();
+	}
 
-    @Override
-    public Action getProjectAction(AbstractProject<?, ?> project) {
-        return new UITestCaptureProjectAction(project);
-    }
-    
-    @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
-            BuildListener listener) throws InterruptedException, IOException {
-        build.getActions().add(new UITestCaptureAction(build));
-        return true;
-    }
+	/* Hide the plugin form main Jenkins menu
+	 * */
+	@Override
+	public BuildStepMonitor getRequiredMonitorService() {
+		return BuildStepMonitor.NONE;
+	}
+
+	/* Set the actual run of the plugin visible in the icon list of the project
+	 * */
+	@Override
+	public Action getProjectAction(AbstractProject<?, ?> project) {
+		try {
+			return new UITestCaptureProjectAction(project);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/* Set the plugin history visible after a run performed
+	 * */
+	@Override
+	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
+			BuildListener listener) throws InterruptedException, IOException {
+			build.getActions().add(new UITestCaptureAction(build));
+		return true;
+	}
 }

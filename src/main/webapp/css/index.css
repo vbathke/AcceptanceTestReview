@@ -11,7 +11,7 @@
 .loadingUiTest{width:20px;height:auto;margin:-5px 5px 0px -20px;display:none;}
 
 .quadroFalhas{display:none;}
-.analise{width:120px;display:none;}
+.analise{width:120px;}
 #resultado{float:right;margin-top:14px;margin-right:14px;display:none;position:fixed;top:70px;right:30px;}
 #resultado table td{font-size:12px;}
 .resultado div{display:inline-block;}
@@ -22,8 +22,8 @@
 .yui-log{display:none;}
 #side-panel{display:none;}
 .fixedGridLayout #main-panel{padding:0px;}			
-.todo{width:50%;height:130px;margin-bottom:20px;}
-
+.todo{width:100%;height:130px;margin-bottom:10px;}
+.behavior{width:100%;margin-bottom:10px;}
 
 
 .infoUiTest {height:460px;}
@@ -32,3 +32,14 @@
 .stackUiTest {font-size: 11px; display:inline-block;width:60%;height:400px;}
 .stackUiTest pre { width:90%;height:100%;overflow:auto;white-space: pre-wrap;}
 .uiTest a {text-decoration: none;}
+
+.comboAnalise{margin-bottom:10px;margin-top:5px;margin-right:70px;}
+.imgstatus{width:15px;height:auto;}
+
+.observacoes{padding:0px 40px 0px 0px;display: table-cell !important;width:50%  !important;}
+#dlFailApp .observacoes{display:block;}
+#dlFailTest .observacoes{display:block;}
+
+.description-commands{text-align:right;margin-bottom:10px;}
+.description-commands .description-status{margin:0px 10px 0px 10px;}
+

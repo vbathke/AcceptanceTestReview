@@ -2,8 +2,9 @@
 	<l:layout title="UI Test Capture">
 		<l:main-panel>
 			<script>var historico=true;</script>
+			<script>var resources='target/';</script>
 			<st:include page="/br/vbathke/jenkins/displayTests.jelly" />
 		    <link rel="stylesheet" href="css/historico.css" />
 	    </l:main-panel>
     </l:layout>
-</j:jelly>   
+</j:jelly>
